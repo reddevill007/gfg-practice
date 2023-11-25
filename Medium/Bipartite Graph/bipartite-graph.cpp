@@ -4,7 +4,7 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
-    bool checkBipartite(vector<int>adj[], int curr, vector<int> &color, int currColor) {
+    bool checkBipartiteDFS(vector<int>adj[], int curr, vector<int> &color, int currColor) {
         color[curr] = currColor;
         
         for(int &v : adj[curr]) {
@@ -16,7 +16,7 @@ class Solution {
                 
                 int colorOfV = 1 - currColor;
                 
-                if(checkBipartite(adj, v, color, colorOfV) == false)
+                if(checkBipartiteDFS(adj, v, color, colorOfV) == false)
                     return false;
             }
             
@@ -25,6 +25,30 @@ class Solution {
         return true;
         
     }
+    
+    bool checkBipartiteBFS(vector<int>adj[], int curr, vector<int> &color, int currColor) {
+        queue<int> todo;
+        todo.push(curr);
+        color[curr] = currColor;
+        
+        while(!todo.empty()) {
+            int u = todo.front();
+            todo.pop();
+            
+            for(int v: adj[u]) {
+                if(color[u] == color[v]) {
+                    return false;
+                }
+                else if(color[v] == -1) {
+                    color[v] = 1 - color[u];
+                    todo.push(v);
+                }
+            }
+            
+        }
+        return true;
+    }
+    
 public:
 	bool isBipartite(int V, vector<int>adj[]){
 	    // Code here
@@ -32,7 +56,7 @@ public:
 	    
 	   for(int i = 0; i < V; i++) {
 	       if(color[i] == -1) {
-	           if(checkBipartite(adj, i, color, 1) == false) return false;
+	           if(checkBipartiteBFS(adj, i, color, 1) == false) return false;
 	       }
 	   }
 	   
