@@ -35,17 +35,16 @@ class Solution {
             int u = todo.front();
             todo.pop();
             
-            for(int v: adj[u]) {
+            for(int &v: adj[u]) {
                 if(color[u] == color[v]) {
                     return false;
-                }
-                else if(color[v] == -1) {
+                } else if(color[v] == -1) {
                     color[v] = 1 - color[u];
                     todo.push(v);
                 }
             }
-            
         }
+        
         return true;
     }
     
